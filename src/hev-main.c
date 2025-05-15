@@ -14,6 +14,8 @@
 #include <hev-task.h>
 #include <hev-socks5-misc.h>
 #include <hev-socks5-logger.h>
+#include <hev-task-logger.h>
+#include <hev-task-io.h>
 
 #include "hev-misc.h"
 #include "hev-config.h"
@@ -65,6 +67,10 @@ hev_socks5_server_main_inner (void)
     if (res < 0)
         goto exit1;
 
+    res = hev_task_logger_init (log_level, log_file);
+    if (res < 0)
+        goto exit4;
+
     res = hev_socks5_logger_init (log_level, log_file);
     if (res < 0)
         goto exit2;
@@ -82,11 +88,15 @@ hev_socks5_server_main_inner (void)
     if (res < 0)
         goto exit3;
 
+    hev_task_io_bandwidth_init();
+
     hev_socks5_proxy_run ();
 
     hev_socks5_proxy_fini ();
 exit3:
     hev_socks5_logger_fini ();
+exit4:
+    hev_task_logger_fini();
 exit2:
     hev_logger_fini ();
 exit1:
@@ -113,6 +123,16 @@ hev_socks5_server_main_from_str (const unsigned char *config_str,
         return -1;
 
     return hev_socks5_server_main_inner ();
+}
+
+const char *hev_socks5_server_bandwidth_get_formatted_upload()
+{
+    return hev_task_io_bandwidth_get_formatted_upload();
+}
+
+const char *hev_socks5_server_bandwidth_get_formatted_download()
+{
+    return hev_task_io_bandwidth_get_formatted_download();
 }
 
 void

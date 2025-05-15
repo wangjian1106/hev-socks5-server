@@ -66,6 +66,8 @@ endif
 
 .PHONY: exec static shared clean install uninstall tp-static tp-shared tp-clean
 
+all: $(EXEC_TARGET)
+
 exec : $(EXEC_TARGET)
 
 static : $(STATIC_TARGET)

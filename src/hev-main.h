@@ -42,6 +42,12 @@ int hev_socks5_server_main_from_file (const char *config_path);
 int hev_socks5_server_main_from_str (const unsigned char *config_str,
                                      unsigned int config_len);
 
+
+
+const char *hev_socks5_server_bandwidth_get_formatted_upload();
+
+const char *hev_socks5_server_bandwidth_get_formatted_download();
+
 /**
  * hev_socks5_server_quit:
  *
